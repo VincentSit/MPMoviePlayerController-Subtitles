@@ -19,6 +19,7 @@ private struct AssociatedKeys {
     static var TimerKey = "TimerKey"
 }
 
+@objcMembers
 public class Subtitles {
     
     // MARK: - Properties
@@ -172,7 +173,8 @@ public class Subtitles {
 
 public extension MPMoviePlayerController {
     
-    //MARK:- Public properties
+    //MARK:- Public
+    @objc
     var subtitleLabel: UILabel? {
         get { return objc_getAssociatedObject(self, &AssociatedKeys.SubtitleKey) as? UILabel }
         set (value) { objc_setAssociatedObject(self, &AssociatedKeys.SubtitleKey, value, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
@@ -197,6 +199,7 @@ public extension MPMoviePlayerController {
     }
     
     //MARK:- Public methods
+    @objc
     func addSubtitles() -> Self {
         
         // Get subtitle view
@@ -219,6 +222,7 @@ public extension MPMoviePlayerController {
         
     }
     
+    @objc
     func show(subtitles string: String) {
         
         // Parse
@@ -302,10 +306,10 @@ public extension MPMoviePlayerController {
                 switch self.playbackState {
                     
                 case .playing:
-
+                    
                     // Start timer
                     self.timer = Timer.schedule(repeatInterval: 0.5) { (timer) -> Void in self.searchSubtitles() }
-
+                    
                     break
                     
                 default:
@@ -320,7 +324,7 @@ public extension MPMoviePlayerController {
         }
         
     }
-
+    
     fileprivate func searchSubtitles() {
         
         if playbackState == .playing {
@@ -345,6 +349,7 @@ public extension MPMoviePlayerController {
 // Others
 public extension Timer {
     
+    @objc
     class func schedule(repeatInterval interval: TimeInterval, handler: ((Timer?) -> Void)!) -> Timer! {
         let fireDate = interval + CFAbsoluteTimeGetCurrent()
         let timer = CFRunLoopTimerCreateWithHandler(kCFAllocatorDefault, fireDate, interval, 0, 0, handler)
